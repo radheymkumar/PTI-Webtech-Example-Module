@@ -1,0 +1,5 @@
+name = Pager Ptiwebtech
+description = Ptiwebtech Pager
+core = 7.x
+package = Pti Webtech
+version = 7.x

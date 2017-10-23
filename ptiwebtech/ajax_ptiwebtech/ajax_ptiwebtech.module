@@ -1,0 +1,80 @@
+<?php
+/**
+ * hook_menu()
+ */
+
+function ajax_ptiwebtech_menu() {
+	$items = array();
+		$items['pti/ajax-example'] = array(
+			'title' => t('Ajax Example'),
+			'page callback' => 'pti_ajax_example',
+			'access callback' => TRUE,
+		);
+		$items['pti/ajax/simple'] = array(
+			'title' => t('Ajax Simple'),
+			'page callback' => 'drupal_get_form',
+			'page arguments' => array('pti_ajax_simple'),
+			'access callback' => TRUE,
+		);
+		$items['pti/ajax/checkbox'] = array(
+			'title' => t('Ajax Checkbox'),
+			'page callback' => 'pti_ajax_checkbox',
+			'access callback' => TRUE,
+		);
+		$items['pti/ajax/autotextfield'] = array(
+			'title' => t('Ajax AutoTextField'),
+			'page callback' => 'pti_ajax_autotextfield',
+			'access callback' => TRUE,
+		);
+
+	return $items;	
+}
+
+function pti_ajax_example() {
+	$markup = t('PTI Ajax Example Custom Module');
+
+	$list[] = l(t('Simplest Ajax Example'), 'pti/ajax/simple');
+	$list[] = l(t('Generate Checkbox'), 'pti/ajax/checkbox');
+	$list[] = l(t('Generate Textfield'), 'pti/ajax/autotextfield');
+	
+	$variable['items'] = $list;
+	$variable['type'] = 'ul';
+
+	$markup .= theme('item_list', $variable);
+	
+	return $markup;
+}
+
+function pti_ajax_simple($form, &$form_state) {
+	
+	$form['change'] = array(
+		'#title' => t('Choose Ajax Example'),
+		'#type' => 'select',
+		'#options' => array('one'=>'One','two'=>'Two','three'=>'Three'),
+		'#ajax' => array(
+						'callback' => 'pti_ajax_simple_callback',
+						'wrapper' => 'replace_txt_div',
+						),
+		);
+	$form['replace_txt'] = array(
+		'#title' => t('Why'),
+		'#type' => 'textfield',
+		'#perfix' => '<div class="replace_txt_div">',
+		'#suffix' => '</div>',
+		);
+	/*echo "<pre>";
+	print_r($form_state);
+	die;*/
+/*	if (!empty($form_state['values']['change'])) {
+    $form['replace_txt']['#description'] = t("Say why you chose '@value'", array('@value' => $form_state['values']['change']));
+  }
+*/
+	return $form;
+
+}
+
+function pti_ajax_simple_callback($form, $form_state){
+
+	 return $form_state['replace_txt'];
+	
+}

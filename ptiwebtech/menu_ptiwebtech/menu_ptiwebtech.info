@@ -1,0 +1,5 @@
+name = Menu Ptiwebtech
+description = Ptiwebtech Menu
+core = 7.x
+package = Pti Webtech
+version = 7.x

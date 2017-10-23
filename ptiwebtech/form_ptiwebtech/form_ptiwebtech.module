@@ -1,0 +1,97 @@
+<?php
+/*
+function form_ptiwebtech_permission() {
+	return array(
+			'administer my module' => array(
+					'title' => t('PTI Custom Register Form'),
+					'description' => t('this is my pti custom register form'),
+				),
+		);
+
+}*/
+
+function form_ptiwebtech_menu(){
+	$items['pti/form'] = array(
+		'title' => 'PTI Form',
+		'page callback' => '_pti_form',
+		'access callback' => True,
+	);
+	$items['pti/form/state'] = array(
+		'title' => 'PTI Form State',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('pti_form_state_form'),
+		'access callback' => True,
+		'description' => 'Hello This form',
+		'file' => 'form_ptiwebtech_state.inc',
+	);
+	$items['pti/form/element'] = array(
+		'title' => 'Form Element',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('pti_form_element_form'),
+		'access callback' => True,
+		'file' => 'form_ptiwebtech_element.inc',
+	);
+	$items['pti/login'] = array(
+		'title' => 'PTI Login',
+		'page callback' => 'drupal_get_form',
+		'page arguments' => array('pti_form_login_form'),
+		'access callback' => True,
+		'file' => 'form_ptiwebtech_login.inc',
+	);
+	$items['pti/login-user'] = array(
+		'title' => 'Welcome User',
+		'page callback' => 'pti_user_profile',
+		'access callback' => True,
+
+	);
+	$items['pti/user-list'] = array(
+		'title' => 'Welcome User',
+		'page callback' => 'pti_user_list',
+		'access callback' => True,
+
+	);
+	/*$items['pti/user/%'] = array(
+		'title' => 'Welcome User',
+		'page callback' => 'pti_user_profile',
+		'page arguments' => array(2),
+		'access callback' => True,
+
+	);*/
+
+	return $items;
+}
+
+function _pti_form(){
+	$markps = t('This is custom form examples');
+	return $markps;
+}
+
+function pti_user_profile() {
+	//drupal_set_message($user_profile);
+	global $user;
+	return $user->name;
+
+}
+function pti_user_list() {
+	echo "<pre>";
+	$header = array('ID','Name','Created');
+	$query = db_query('Select * From {node}')->execute();
+	//$query1 = $query->)->extend('TableSort')->limit(3)->orderByHeader($header)->execute();
+
+	//$result = $query->execute();
+	/*foreach ($query as $row) { 
+		print_r($row);
+	}*/
+	//print theme('table',$header,$rows);
+	//print_r($query1);
+	//die;
+
+	//print_r($result->rowCount());
+	//print_r($result->fetchObject());	// Fetch first row as a stdClass object.
+	//print_r($result->fetchAssoc);
+	//	print_r($result->fetchColumn(1));	// Fetch specific column 
+	//print_r($result->fetchAll());	// Retrieve all records into an indexed array of stdClass objects.
+	//print_r($result->fetchAllAssoc('title'));
+	
+
+}

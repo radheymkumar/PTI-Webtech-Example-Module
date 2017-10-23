@@ -1,0 +1,63 @@
+<?php
+
+function pager_ptiwebtech_help($path, $arg) {
+	switch ($path) {
+		case 'pti/pager':
+			return '<p>' . t('The layout here is a themed as a table with a default limit of 10 rows per page. The limit can be changed in the code by changing the limit to some other value.  This can be extended to add a filter form as well so the user can choose how many they would like to see on each screen.') . '</p>';	
+	}
+}
+
+function pager_ptiwebtech_menu() {
+	$items['pti/pager'] = array(
+			'title' => t('PTI Pager'),
+			'page callback' => 'pti_pager_list',
+			'access callback' => True,
+		);
+	return $items;
+}
+
+function pti_pager_list(){
+//	echo "<pre>";
+	$header = array(
+		array('data' => t('NID'), 'field' => 'nid'),
+		array('data' => t('Title'), 'field' => 'title', 'sort' => 'desc'),
+		array('data' => t('Created')),
+		array('data' => t('Body')),
+		array('data' => t('City')),
+		);
+
+	$query = db_select('node','n')
+						->extend('PagerDefault')
+						->extend('TableSort')
+						->limit(10)
+						->orderByHeader($header)
+						->condition('n.status',1)
+						->condition('n.type','page')
+						->fields('n', array('nid','title','created'));
+	$query->leftjoin('field_data_body', 'b', 'n.nid = b.entity_id ');					
+	$query->fields('b', array('body_value'));
+	$query->leftjoin('field_data_field_city', 'c', 'n.nid = c.entity_id');
+	$query->fields('c', array('field_city_value'));
+
+	$result = $query->execute();					
+					
+						
+	$rows = array();
+	foreach ($result as $row) {
+
+		$rows[] = array('data' => (array)$row);
+	}
+
+	$build['pager_table'] = array(
+			'#theme' => 'table',
+			'#header' => $header,
+			'#rows' => $rows,
+			'#empty' =>  t('There are no date formats found in the db'),
+		);
+
+	$build['pager'] = array('#theme' => 'pager');
+	//$build['pager_pager'] = array('#theme' => 'pager');
+
+	return $build;
+	//die;
+}

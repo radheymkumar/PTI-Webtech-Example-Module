@@ -1,0 +1,6 @@
+name = Ajax Ptiwebech
+description = Pti Webtech AJax custom module
+core = 7.x
+version = 7.x
+package = Pti Webtech
+				

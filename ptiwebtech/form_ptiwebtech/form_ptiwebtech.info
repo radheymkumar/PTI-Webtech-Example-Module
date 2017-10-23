@@ -1,0 +1,7 @@
+name = Form Ptiwebtech
+description = Ptiwebtech Form
+core = 7.x
+package = Pti Webtech
+version = 7.x
+
+dependencies[] = date

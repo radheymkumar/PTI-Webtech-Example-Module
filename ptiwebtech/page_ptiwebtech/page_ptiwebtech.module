@@ -1,0 +1,79 @@
+<?php
+
+function page_ptiwebtech_help($path, $arg) {
+	switch ($path) {
+		case 'pti/page/simple':
+			return t('this is help simple page');				
+		case 'admin/help#page':
+			return t('this is page second step');
+	}
+}
+
+function page_ptiwebtech_permission() {
+	return array(
+			'access simple page' => array(
+				'title' => t('Access Simple Page'),
+				'description' => t('This is access smiple page'),
+			),
+			'access arguments page' => array(
+				'title' => t('Access Arguments Page'),
+				'description' => t('This is Arguments page'),
+			),
+		);
+}
+
+function page_ptiwebtech_menu() {
+	$items['pti/pages'] = array(
+			'title' => t('PTI Page'),
+			'page callback' => 'pti_page',
+			'access callback' => True,
+			'expanded' => True,
+		);
+	$items['pti/page/simple/page'] = array(
+			'title' => t('PTI Simple Page'),
+			'page callback' => 'pti_page_simple',
+			'access arguments' => array('access simple page'),
+		);
+	$items['pti/page/arg/%/%'] = array(
+			'title' => t('PTI Page Arguments'),
+			'page callback' => 'pti_page_arg',
+			'page arguments' => array(3,4),
+			'access arguments' => array('access arguments page'),
+			//'access callback' => True,
+		);
+
+	return $items;
+}
+
+function pti_page() {
+	
+	return array(
+			'#markup' => t('<p> PTI Page Example </p> <p><a href="@simple_link">Simple Page </a></p> 
+							<p><a href="@arg_link">Page Arguments</a>  </p>',
+				array('@simple_link' => url('pti/page/simple'), '@arg_link' => url('pti/page/arg/1/2'))
+			),
+		);
+}
+
+function pti_page_simple() {
+	return t('This is simple page "Access Simple Page"');
+}
+
+function pti_page_arg($first, $second) {
+
+	if(!is_numeric($first) || !is_numeric($second)){
+		drupal_access_denied();
+		return;
+	}
+
+	$list[] = t("First number is @number", array('@number' => $first));
+	$list[] = t("Second number is @second", array('@second' => $second));
+	$list[] = t("Total number was @total", array('@total' => $first+$second));
+	
+	$render_array['pti_page_arg415415'] = array(
+			'#theme' => 'item_list',
+			'#items' => $list,
+			'#title' => t('Arguments List'),
+		);
+	return $render_array;
+}

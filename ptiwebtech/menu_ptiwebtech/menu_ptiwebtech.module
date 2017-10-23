@@ -1,0 +1,123 @@
+<?php
+	//drupal_set_message("test");
+function menu_ptiwebtech_menu() {
+	$items['pti'] = array(
+		'title' => 'Menu1',
+		'page callback' => '_menu_page',
+		'page arguments' => array('This page is displayed by the simplest (and base) menu example.'),
+		'access callback' => True,		
+	);
+	$items['pti/permission'] = array(
+		'title' => 'Menu Permission',
+		'page callback' => '_menu_page_permission',
+		'access arguments' => array('access protect menu'),
+	);
+	$items['pti/callback'] = array(
+		'title' => 'PTI Callback',
+		'page callback' => '_menu_page_callback',
+		'access callback' => True,
+		'type' => MENU_CALLBACK,
+	);
+	$items['pti/tab'] = array(
+		'title' => 'PTI TAB',
+		'page callback' => '_menu_tab',
+		'page arguments' => array('This is tab menu'),
+		'access callback' => True,
+	);
+		$items['pti/tab/default'] = array(
+			'title' => 'Default Menu',
+			'type' => MENU_DEFAULT_LOCAL_TASK,
+			'weight' => 1,
+		);
+		$items['pti/tab/second'] = array(
+			'title' => 'Second Menu',
+			'page callback' => '_menu_second',
+			'page arguments' => array('This is a second menu...'),
+			'access callback' => True,
+			'weight' => 2,
+			'type' => MENU_LOCAL_TASK,
+		);
+		$items['pti/tab/third'] = array(
+			'title' => 'Third Menu',
+			'page callback' => '_menu_third',
+			'page arguments' => array('This is Third Page...'),
+			'access callback' => True,
+			'weight' => 3,
+			'type' => MENU_LOCAL_TASK,
+		);
+	$items['pti/arg'] = array(
+		'title' => 'PTI Arguments',
+		'page callback' => '_menu_arg',
+		'access callback' => True,
+	);	
+	$items['pti/arg/%/%'] = array(
+		'title' => 'PTI Arguments',
+		'page callback' => '_menu_arg_value',
+		'page arguments' => array(2,3),
+		'access callback' => True,
+	);	
+	$items['pti/user'] = array(
+		'title callback' => '_menu_user',
+		'title arguments' => array(t('UserName : ')),
+		'page callback' => '_menu_user_page',
+		'access callback' => True,
+	);
+
+	$items['user/%user/pti'] = array(
+		'title' => t('My links'),
+		'page callback' => 'yourmodule_linkspage',
+		'page arguments' => array(1),
+		'access callback' => TRUE,
+		'type' => MENU_LOCAL_TASK,
+	);	
+	return $items;
+}
+function yourmodule_linkspage(){
+	return "hi";
+}
+function _menu_user($str){
+	global $user;
+	$username = !empty($user->name) ? $user->name : t('anonymous');
+  	return $str . ' ' . $username;
+}
+function _menu_page($arg = NULL) {
+	$content = " This is the base page of the Menu Example. There are a number of examples here, from the most basic (like this one) to extravagant mappings of loaded placeholder arguments. Enjoy!";
+	
+	return $content ."<br>". $arg;
+}
+
+function _menu_page_permission(){
+	return "This is protect page...!!!";
+}
+
+function _menu_page_callback(){
+	return "This is Menu Callback page.";
+}
+
+function _menu_tab(){
+	return "TAB Menu";
+}
+function _menu_second($arg = NULL) {
+	return $arg;
+}
+function _menu_third(){
+	return "Hi...This is Third Page";
+}
+function _menu_arg(){
+	return 'this is arg : <a href="'.url('pti/arg/one/two').'">link1</a>';
+}
+function _menu_arg_value($arg1 = NULL, $arg2 = NULL){
+	return $arg1  . " " .  $arg2;
+	
+}
+function _menu_user_page() {
+	return "FFFF";
+}
+
+function menu_ptiwebtech_permission() {
+	return array(
+			'access protected ptiwebtech menu' => array(
+				'title' => t('Access the Ptiwebtech protected Menu'),
+				),
+		);
+}
